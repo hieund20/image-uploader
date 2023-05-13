@@ -1,12 +1,23 @@
-import logo from "./logo.svg";
-import "./App.css";
+import "./App.scss";
 import MainView from "./components/main";
-import { useState } from "react";
 
 function App() {
-  const [isLoading, setLoading] = useState(false);
-
-  return <div className="App">{<MainView uploading={setLoading} />}</div>;
+  return (
+    <div className="App">
+      {<MainView />}
+      <p>
+        Created by{" "}
+        <a href="https://github.com/hieund20" target="_blank" rel="noreferrer">
+          hieund
+        </a>
+      </p>
+      <p>
+        <a href="https://devchallenges.io/" target="_blank" rel="noreferrer">
+          https://devchallenges.io
+        </a>{" "}
+      </p>
+    </div>
+  );
 }
 
 export default App;
