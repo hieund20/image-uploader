@@ -59,12 +59,12 @@ const MainView = (props) => {
       {image ? (
         <>
           <img src={checkMark} alt="check-mark-icon" />
-          <h3>Uploaded Successfully!</h3>
+          <h2>Uploaded Successfully!</h2>
         </>
       ) : (
         <>
-          <h4>Upload your image</h4>
-          <h5>File should be Jpeg, Png,...</h5>
+          <h3>Upload your image</h3>
+          <h4>File should be Jpeg, Png,...</h4>
         </>
       )}
 
@@ -85,7 +85,7 @@ const MainView = (props) => {
         </div>
       )}
 
-      {!image && <span>Or</span>}
+      {!image && <h4>Or</h4>}
 
       {!image ? (
         <>
@@ -93,7 +93,7 @@ const MainView = (props) => {
             className="main-view__btn-choose-file"
             onClick={() => handleUploadClick()}
           >
-            Choose a file
+            <span>Choose a file</span>
           </button>
           <input
             type="file"
