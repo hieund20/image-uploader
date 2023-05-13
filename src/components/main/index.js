@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { backgroundUpload, checkMark } from "../../assets/images/svgs";
-import { CloudinaryContext, Image, Transformation } from "cloudinary-react";
 import axios from "axios";
 import BarLoader from "react-spinners/BarLoader";
 import "./style.scss";
@@ -9,13 +8,13 @@ const MainView = (props) => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const inputFileRef = useRef(null);
+  const [dragActive, setDragActive] = useState(false);
 
   const handleUploadClick = () => {
     inputFileRef.current?.click();
   };
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileUpload = (file) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "hieund_cloudinary_preset");
@@ -31,6 +30,28 @@ const MainView = (props) => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation(); //Chống lan truyền
+
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+      console.log("dragenter");
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+      console.log("dragout");
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileUpload(e.dataTransfer.files[0]);
+    }
   };
 
   return (
@@ -52,7 +73,13 @@ const MainView = (props) => {
           <img src={image?.imageUrl} alt="uploaded-img" />
         </div>
       ) : (
-        <div className="main-view__upload">
+        <div
+          className={`main-view__upload ${dragActive ? "--drag-active" : ""}`}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+        >
           <img src={backgroundUpload} alt="backgroundUpload" />
           <span>Drag & Drop your image here</span>
         </div>
@@ -71,7 +98,7 @@ const MainView = (props) => {
           <input
             type="file"
             ref={inputFileRef}
-            onChange={handleFileUpload}
+            onChange={(e) => handleFileUpload(e.target.files[0])}
             style={{ display: "none" }}
           />
         </>
